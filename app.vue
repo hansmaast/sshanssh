@@ -1,53 +1,66 @@
 <script setup lang="ts">
+import { useElementVisibility } from '@vueuse/core';
 import { content } from './content'
+import { gsap } from "gsap";
+import { SplitText } from "gsap/SplitText";
 
-// const displayScrollHint = ref(false)
+gsap.registerPlugin(SplitText);
 
-// onMounted(() => {
-//   let timeout = setTimeout(() => {
-//     displayScrollHint.value = true
-//   }, 10000);
+const containerId = useId()
+const containerTarget = useTemplateRef<HTMLDivElement>(containerId)
+const containerIsVisible = useElementVisibility(containerTarget)
+const hasBeenAnimated = ref(false)
 
-//   window.onscroll = () => {
-//     timeout.close()
-//     displayScrollHint.value = false
-//   }
-  
-//   window.onscrollend = () => {
-//     console.log('end')
-//     timeout = setTimeout(() => {
-//     displayScrollHint.value = true
-//   }, 10000);
-//   }
-// })
+const titleClass = `title-${containerId}`
+const paragraphClass = `paragraph-${containerId}`
+
+
+watch(containerIsVisible, (isVisible) => {
+  console.log('isVisible', isVisible)
+    if (isVisible && !hasBeenAnimated.value) {
+      const timeline = gsap.timeline();  
+      
+      // split elements with the class "split" into words and characters
+        const split = SplitText.create(`.${titleClass}`, { type: "words, chars" });
+
+        // now animate the characters in a staggered fashion
+        timeline
+          .from(split.chars, {
+                  duration: .1, 
+                  alpha: 0,
+                  scale: .1, 
+                  stagger: 0.03,
+                  ease: 'power3.inOut',
+          })
+          .from(`.${paragraphClass}`, {
+              filter: 'blur(10px)',
+              duration: .4,
+              ease: 'sine',
+              onComplete() {
+                  hasBeenAnimated.value = true
+              },
+          })
+    }
+})
 </script>
 
 <template>
   <header>
     <!--  -->
   </header>
-  <main class="px-4 flex flex-col gap-8 justify-start">
+  <main ref="el" class="px-6 flex flex-col gap-8 justify-start">
     <NuxtRouteAnnouncer />
     <article>
-      <section v-for="({ title, paragraph, id }, i) of content" :key="id"
-        class="max-w-2xl mx-auto h-dvh flex flex-col justify-center">
-        <component :is="id === 1 ? 'h1' : 'h2'" class="text-3xl md:text-4xl font-semibold mb-3">
-          {{ title }}
-        </component>
-        <p class="text-lg md:text-xl font-extralight mb-5">{{ paragraph }}</p>
-        <div class="flex gap-1">
-          <div v-for="({ id: dotId }) of content" :key="dotId" class="w-4 h-4 md:w-5 md:h-5  rounded-full "
-            :class="dotId <= id ? 'bg-gray-900' : 'bg-gray-300'" />
-        </div>
-      </section>
+      <GSappedContent
+        v-for="item in content"
+        :key="item.id"
+        :content="item"
+        :number-of-content-items="content.length"
+      />
     </article>
-    <!-- <div v-if="displayScrollHint" class="fixed bottom-20 w-12 h-12 bg-black left-1/2 -translate-x-2/4 rounded-full animate-pulse">
-      <div class="bg-white w-[3px] bottom-3 top-3 absolute left-1/2 -translate-x-2/4 rounded-3xl"/>
-      <div class="bottom-3 bg-white w-[3px] h-2/5 absolute left-1/2 -translate-x-2/4 rotate-45 origin-bottom-left rounded-3xl"/>
-      <div class="bottom-3 bg-white w-[3px] h-2/5 absolute left-1/2 -translate-x-2/4 -rotate-45 origin-bottom-right rounded-3xl"/>
-    </div> -->
+    <ScrollHint />
   </main>
-  <footer class="flex justify-center items-center gap-2 py-8">
+  <footer class="flex justify-center items-center gap-2 py-10">
     <p class="text-sm text-gray-500">
       Made with
       <span>
