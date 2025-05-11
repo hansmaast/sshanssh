@@ -71,7 +71,7 @@ watch(containerIsVisible, (isVisible) => {
       duration: 0.25,
       alpha: 0,
       scale: 0,
-      stagger: 0.025,
+      stagger: 0.12,
       ease: 'back.out',
     })
   }
