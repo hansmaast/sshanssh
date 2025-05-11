@@ -7,7 +7,11 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "start": "nohup node .output/server/index.mjs > app.log 2>&1 &",
+    "stop": "pkill -f 'node .output/server/index.mjs'",
+    "restart": "bun run stop && bun run start",
+    "deploy": "bun run build && bun run restart"
   },
   "dependencies": {
     "@nuxt/eslint": "1.3.0",
