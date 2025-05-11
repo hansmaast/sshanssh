@@ -1,50 +1,17 @@
 <script setup lang="ts">
-import { useElementVisibility } from '@vueuse/core';
 import { content } from './content'
-import { gsap } from "gsap";
-import { SplitText } from "gsap/SplitText";
 
-gsap.registerPlugin(SplitText);
-
-const containerId = useId()
-const containerTarget = useTemplateRef<HTMLDivElement>(containerId)
-const containerIsVisible = useElementVisibility(containerTarget)
-const hasBeenAnimated = ref(false)
-
-const titleClass = `title-${containerId}`
-const paragraphClass = `paragraph-${containerId}`
-
-
-watch(containerIsVisible, (isVisible) => {
-  console.log('isVisible', isVisible)
-    if (isVisible && !hasBeenAnimated.value) {
-      const timeline = gsap.timeline();  
-      
-      // split elements with the class "split" into words and characters
-        const split = SplitText.create(`.${titleClass}`, { type: "words, chars" });
-
-        // now animate the characters in a staggered fashion
-        timeline
-          .from(split.chars, {
-                  duration: .1, 
-                  alpha: 0,
-                  scale: .1, 
-                  stagger: 0.03,
-                  ease: 'power3.inOut',
-          })
-          .from(`.${paragraphClass}`, {
-              filter: 'blur(10px)',
-              duration: .4,
-              ease: 'sine',
-              onComplete() {
-                  hasBeenAnimated.value = true
-              },
-          })
-    }
+useHead({
+  title: 'sshanssh.work | Hi, I\'m Hans',
+  link: [
+      { rel: 'icon', href: '/favicon.svg', type: 'image/svg+xml' },
+  ],
 })
+
 </script>
 
 <template>
+  
   <header>
     <!--  -->
   </header>
