@@ -37,7 +37,7 @@ export const content: Content[] = [
             'ph:brain-thin',
             'ph:brackets-curly-thin',
             'ph:compass-tool-thin',
-            'arcticons:emoji-brain',
+            'ph:wrench-thin',
         ]
     },
     {

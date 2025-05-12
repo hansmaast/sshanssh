@@ -92,7 +92,7 @@ watch(containerIsVisible, (isVisible) => {
           :class="titleClass">
           {{ content.title }}
         </component>
-        <p class="text-lg md:text-xl font-light md:font-extralight mb-5" :class="paragraphClass">
+        <p class="text-lg text-gray-800 md:text-xl font-light md:font-extralight mb-5" :class="paragraphClass">
           {{ content.paragraph }}
         </p>
         <div class="flex gap-1" aria-hidden="true">
