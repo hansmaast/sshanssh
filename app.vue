@@ -6,6 +6,9 @@ useHead({
   link: [
       { rel: 'icon', href: '/favicon.svg', type: 'image/svg+xml' },
   ],
+  bodyAttrs: {
+    class: 'overflow-x-hidden bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100',
+  },
 })
 
 </script>
