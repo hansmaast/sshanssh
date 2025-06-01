@@ -4,7 +4,7 @@ import { content } from './content'
 useHead({
   title: 'sshanssh.work | Hi, I\'m Hans',
   link: [
-      { rel: 'icon', href: '/favicon.svg', type: 'image/svg+xml' },
+    { rel: 'icon', href: '/favicon.svg', type: 'image/svg+xml' },
   ],
   bodyAttrs: {
     class: 'overflow-x-hidden bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100',
@@ -14,19 +14,15 @@ useHead({
 </script>
 
 <template>
-  
+
   <header>
     <!--  -->
   </header>
   <main ref="el" class="px-6 flex flex-col gap-8 justify-start">
     <NuxtRouteAnnouncer />
     <article>
-      <GSappedContent
-        v-for="item in content"
-        :key="item.id"
-        :content="item"
-        :number-of-content-items="content.length"
-      />
+      <GSappedContent v-for="item in content" :key="item.id" :content="item"
+        :number-of-content-items="content.length" />
     </article>
     <ScrollHint />
   </main>
@@ -41,3 +37,5 @@ useHead({
     </p>
   </footer>
 </template>
+
+<style></style>

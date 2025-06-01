@@ -4,7 +4,6 @@ import { gsap } from "gsap";
 import { SplitText } from "gsap/SplitText";
 import type { Content } from '~/content';
 import { Icon } from "@iconify/vue";
-import BubbleWraps from './BubbleWraps.vue'
 
 gsap.registerPlugin(SplitText);
 
@@ -26,13 +25,17 @@ const dotClass = `dots-${containerId}`
 const iconClass = `icon-${containerId}`
 
 let timeline: gsap.core.Timeline | null = null
+
+onBeforeMount(() => {
+  gsap.set(`.${dotClass}`, { alpha: 0, scale: 0 });
+  gsap.set(`.${paragraphClass}`, { alpha: 0 })
+})
+
 onMounted(() => {
   timeline = gsap.timeline().pause();
 
   const titleParts = SplitText.create(`.${titleClass}`, { type: "words, chars" });
   const paragraphParts = SplitText.create(`.${paragraphClass}`, { type: "words, chars" });
-
-  gsap.set(`.${dotClass}`, { alpha: 0, scale: 0 });
 
   timeline
     .fromTo(titleParts.chars, {
@@ -75,15 +78,19 @@ watch(containerIsVisible, (isVisible) => {
       stagger: 0.12,
       ease: 'back.out',
     })
+    gsap.to(`.${paragraphClass}`, {
+      duration: .35,
+      alpha: 1,
+      ease: 'sine',
+    })
   }
 })
 </script>
 
 <template>
-  <section class="max-w-2xl mx-auto min-h-svh flex flex-col justify-center relative">
-    <BubbleWraps />
+  <section class="max-w-2xl mx-auto min-h-[90vh] flex flex-col justify-center relative">
     <div :ref="containerId" class="flex flex-col gap-12 sm:flex-row sm:gap-5">
-      <div class="flex flex-[3_1_0%] gap-2 sm:gap-5">
+      <div class="flex flex-[3_1_0%] gap-4 sm:gap-5">
         <div class="flex flex-col gap-1" aria-hidden="true">
           <div v-for="n in numberOfContentItems" :key="n" class="w-1 h-full md:h-full rounded-sm shadow-sm md:shadow-md"
             :class="[n <= content.id ? 'dark:bg-white bg-gray-900' : 'bg-slate-100 dark:bg-slate-500', dotClass]" />
@@ -93,7 +100,7 @@ watch(containerIsVisible, (isVisible) => {
             :class="titleClass">
             {{ content.title }}
           </component>
-          <p class="text-lg md:text-xl font-light md:font-extralight mb-5" :class="paragraphClass">
+          <p class="text-lg md:text-xl font-light md:font-extralight" :class="paragraphClass">
             {{ content.paragraph }}
           </p>
         </div>
